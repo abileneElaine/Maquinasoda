@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class SodaMachine : MonoBehaviour
 {
@@ -63,13 +64,21 @@ public class SodaMachine : MonoBehaviour
 
     public void Dispense()
     {
-        if (stock > 0)
-        {
-            stock--;
-            animator.SetTrigger("dispense");
-        }
+        StartCoroutine(DelayAndTransition());
+    }
 
-        // Transição de estado depois da venda
+    private IEnumerator DelayAndTransition()
+    {
+        animator.SetTrigger("dispense");
+        displayText.text = "Entregando...";
+
+        yield return new WaitForSeconds(1.5f); // tempo da animação
+
+        if (stock > 0)
+            stock--;
+
+        UpdateAnimator();
+
         if (stock <= 0)
             SetState(semRefrigeranteState);
         else
