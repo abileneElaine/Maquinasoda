@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class NoCoinState : IMachineState
 {
     private SodaMachine machine;
@@ -14,10 +12,7 @@ public class NoCoinState : IMachineState
         machine.displayText.text = "Insira uma moeda";
     }
 
-    public void Exit()
-    {
-        machine.displayText.text = "";
-    }
+    public void Exit() { }
 
     public void InsertCoin()
     {

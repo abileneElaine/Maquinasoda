@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class VendState : IMachineState
@@ -11,17 +12,29 @@ public class VendState : IMachineState
 
     public void Enter()
     {
-        machine.displayText.text = "Entregando...";
-        machine.Dispense();
+        machine.StartCoroutine(EntregarRefri());
     }
 
-    public void Exit()
-    {
-        machine.displayText.text = "";
-    }
+    public void Exit() { }
 
     public void InsertCoin() { }
+
     public void Cancel() { }
+
     public void Order() { }
+
     public void ToggleMaintenance() { }
+
+    private IEnumerator EntregarRefri()
+    {
+        machine.displayText.text = "Entregando...";
+        machine.animator.SetTrigger("dispense");
+
+        yield return new WaitForSeconds(1.5f);
+
+        if (machine.stock <= 0)
+            machine.SetState(machine.GetNoSodaState());
+        else
+            machine.SetState(machine.GetNoCoinState());
+    }
 }

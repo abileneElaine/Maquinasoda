@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class HasCoinState : IMachineState
 {
     private SodaMachine machine;
@@ -14,10 +12,7 @@ public class HasCoinState : IMachineState
         machine.displayText.text = "OK";
     }
 
-    public void Exit()
-    {
-        machine.displayText.text = "";
-    }
+    public void Exit() { }
 
     public void InsertCoin() { }
 
@@ -28,9 +23,20 @@ public class HasCoinState : IMachineState
 
     public void Order()
     {
-        machine.SetState(machine.GetVendState());
+        if (machine.stock > 0)
+        {
+            machine.stock--;
+            machine.UpdateStockVisual(); // Remove uma latinha visual
+            machine.SetState(machine.GetVendState());
+        }
+        else
+        {
+            machine.SetState(machine.GetNoSodaState());
+        }
     }
 
-    public void ToggleMaintenance() { }
+    public void ToggleMaintenance()
+    {
+        machine.SetState(machine.GetMaintenanceState());
+    }
 }
-

@@ -10,6 +10,7 @@ public class SodaMachine : MonoBehaviour
     public Button maintenanceButton;
     public Text displayText;
     public Transform stockPanel; // onde ficam os ícones das latas
+    public GameObject latinhaPrefab; // prefab da imagem da latinha
 
     public Animator animator;
 
@@ -42,6 +43,7 @@ public class SodaMachine : MonoBehaviour
         maintenanceButton.onClick.AddListener(() => currentState.ToggleMaintenance());
 
         UpdateAnimator();
+        UpdateStockVisual(); // mostra latinhas se houver
     }
 
     public void SetState(IMachineState newState)
@@ -62,6 +64,21 @@ public class SodaMachine : MonoBehaviour
         animator.SetInteger("stock", stock);
     }
 
+    public void UpdateStockVisual()
+    {
+        // Remove todas as latinhas atuais
+        foreach (Transform child in stockPanel)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // Adiciona uma nova latinha para cada item no estoque
+        for (int i = 0; i < stock; i++)
+        {
+            Instantiate(latinhaPrefab, stockPanel);
+        }
+    }
+
     public void Dispense()
     {
         StartCoroutine(DelayAndTransition());
@@ -78,6 +95,7 @@ public class SodaMachine : MonoBehaviour
             stock--;
 
         UpdateAnimator();
+        UpdateStockVisual(); // remove visual da latinha entregue
 
         if (stock <= 0)
             SetState(semRefrigeranteState);

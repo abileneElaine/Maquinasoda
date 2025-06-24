@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class MaintenanceState : IMachineState
 {
     private SodaMachine machine;
@@ -12,28 +10,26 @@ public class MaintenanceState : IMachineState
     public void Enter()
     {
         machine.displayText.text = "Modo Manutenção";
+        machine.UpdateStockVisual();
     }
 
-    public void Exit()
-    {
-        machine.displayText.text = "";
-    }
+    public void Exit() { }
 
     public void InsertCoin()
     {
         machine.stock++;
-        machine.UpdateAnimator();
+        machine.UpdateStockVisual(); // Adiciona visual da latinha
     }
 
     public void Cancel() { }
+
     public void Order() { }
 
     public void ToggleMaintenance()
     {
-        if (machine.stock > 0)
-            machine.SetState(machine.GetNoCoinState());
-        else
+        if (machine.stock <= 0)
             machine.SetState(machine.GetNoSodaState());
+        else
+            machine.SetState(machine.GetNoCoinState());
     }
 }
-

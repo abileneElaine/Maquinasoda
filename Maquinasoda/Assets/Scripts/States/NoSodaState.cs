@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class NoSodaState : IMachineState
 {
     private SodaMachine machine;
@@ -12,15 +10,15 @@ public class NoSodaState : IMachineState
     public void Enter()
     {
         machine.displayText.text = "VAZIO";
+        machine.UpdateStockVisual(); // Remove todas as latinhas visuais
     }
 
-    public void Exit()
-    {
-        machine.displayText.text = "";
-    }
+    public void Exit() { }
 
     public void InsertCoin() { }
+
     public void Cancel() { }
+
     public void Order() { }
 
     public void ToggleMaintenance()
